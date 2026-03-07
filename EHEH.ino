@@ -23,6 +23,30 @@ int buzzerPin = A0;
 IRrecv irrecv(IRS);
 decode_results results;
 
+/*remote stuff
+power = BA45FF00
+VOL+ = B946FF00
+FUNC/STOP = B847FF00
+ARROWSL = BB44FF00
+PLAYPUASE = BF40FF00
+ARROWSR = BC43FF00
+ARROWD = F807FF00
+VOL- = EA15FF00
+ARROWU = F609FF00
+0 = E916FF00
+EQ = E619FF00
+ST/REPT = F20DFF00
+1 = F30CFF00
+2 = E718FF00
+3 = A15EFF00
+4 = F708FF00
+5 = E31CFF00
+6 = E31CFF00
+7 = BD42FF00
+8 = AD52FF00
+9 = B54AFF00
+*/
+
 int currentTime = 1234;
 void setup() {
   Serial.begin(115200);
