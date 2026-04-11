@@ -1,6 +1,6 @@
 #include "SevSeg.h"
-#include <IRremote.h>
-#define IRS A1
+#define IRSbPin A1 //is time
+#define setEHEH A2 //set alrarm
 SevSeg sevseg; 
 //Segment Pins below
 int aPin = 2;
@@ -18,13 +18,20 @@ int d3Pin = 9;
 int d4Pin = 10;
 
 int buzzerPin = A0;
+int highC = 0;
+int lowC = 0;
 
+bool settingAlarm = false;
+bool alarmArmed = false;
+unsigned long currentTime = 0;
+unsigned long alarmTime = -1;
 
-IRrecv irrecv(IRS);
-decode_results results;
+int clockMode = 0; // 0 = normal clock 1 = setting clock
+
 
 int alarmEH = 432;
  
+int buttonState = 0;
 
 
 /*remote stuff
@@ -59,7 +66,7 @@ void blare(unsigned EHEH = 432, unsigned stopEHEH = 1000){
   delay(stopEHEH);
 }
 
-int currentTime = 1234;
+
 void setup() {
   Serial.begin(57600);
   byte numDigits = 4;
@@ -72,44 +79,28 @@ void setup() {
   pinMode(buzzerPin, OUTPUT);
   
 
-  IrReceiver.begin(IRS, ENABLE_LED_FEEDBACK);
+ 
 }
 
 void loop() {
   sevseg.setNumber(currentTime, 2);
   sevseg.refreshDisplay();
-
-
-unsigned freque = 432;
-      unsigned daley = 200;
-
-  if (IrReceiver.decode()){
-    //  Serial.println(IrReceiver.decodedIRData.decodedRawData); // Print "old" raw data
-    auto remote = IrReceiver.decodedIRData.command;
-    remote = 31;
-      IrReceiver.printIRResultShort(&Serial);
-    unsigned freque = 432;
-    unsigned daley = 200;
-    // switch(remote){
-    //   case 7: //play
-    //     daley = 2000;
-    //     break;
-    //   case 3: //stop
-    //     daley-= 100;
-    //     break;
-    //   case 31: // vol up
-    //     freque -= 20;
-    //     break;
-    //   case 23: //vo down
-    //     freque += 20;
-    //     break;
-    //   default:
-    //     break;
-    // }
-    blare(freque, daley);
-    delay(1000);
-    IrReceiver.resume();
+  buttonState = digitalRead(IRSbPin);
+    if (buttonState == HIGH){
+    highC++;
+     
+    lowC = 0;
   }
-  blare(freque, daley);
+  else{
+    
+    lowC++;
+    
+     if( highC >0){
+     }
+    highC = 0;
+  }
+  currentTime += millis() - currentTime;
+  Serial.println(currentTime);
+
     // delay(1000);
 }
